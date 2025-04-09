@@ -1,0 +1,9 @@
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface SudokuInterface extends Remote {
+    String[] getPuzzle() throws RemoteException;
+    String[] getSolution() throws RemoteException;
+
+    boolean validateMove(int row, int col, String value) throws RemoteException;
+}
