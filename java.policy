@@ -1,0 +1,4 @@
+grant {
+    // Autorise l'accès aux opérations sur le registre RMI
+    permission java.security.AllPermission;
+};

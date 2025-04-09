@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.RMISecurityManager;
+
 
 public class SudokuClient {
     private SudokuInterface stub;
@@ -27,10 +29,10 @@ public class SudokuClient {
 
     public SudokuClient() {
         try {
-            Registry registry = LocateRegistry.getRegistry("localhost");
+            Registry registry = LocateRegistry.getRegistry("localhost", 2000);
             stub = (SudokuInterface) registry.lookup("SudokuGame");
             puzzle = stub.getPuzzle();
-            solution = stub.getSolution();
+            solution = stub.getSolution(); // Assurez-vous que le serveur renvoie aussi la solution.
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,6 +141,8 @@ public class SudokuClient {
     }
 
     public static void main(String[] args) {
+        //Sécurité
+        System.setSecurityManager(new RMISecurityManager());
         new SudokuClient();
     }
 }

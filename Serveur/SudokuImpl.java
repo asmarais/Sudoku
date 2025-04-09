@@ -3,10 +3,12 @@ import java.rmi.RemoteException;
 
 public class SudokuImpl extends UnicastRemoteObject implements SudokuInterface {
     String[] puzzle = {
-    "--3-9----", "-6---2--5", "8--4--7--", 
-    "--7-5--9-", "9----1---", "-3-9--2--", 
-    "5--6--8--", "--2-1--7", "----4--3-"
+         "-8------5", "2-------9", "-----7-1-",
+        "-5------4", "--3----9-", "--6-----7",
+        "9-------2", "67-83----", "8----5---"
+    
 };
+       
 
     private final String[] solution = {
         "387491625", "241568379", "569327418",
