@@ -5,7 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.RMISecurityManager;
 
-
 public class SudokuClient {
     private SudokuInterface stub;
     private String[] puzzle;
@@ -21,6 +20,7 @@ public class SudokuClient {
 
     class Tile extends JButton {
         int r, c;
+
         Tile(int r, int c) {
             this.r = r;
             this.c = c;
@@ -30,9 +30,11 @@ public class SudokuClient {
     public SudokuClient() {
         try {
             Registry registry = LocateRegistry.getRegistry("localhost", 2000);
-            stub = (SudokuInterface) registry.lookup("SudokuGame");
+            FabSudokuInterface fabrique = (FabSudokuInterface) registry.lookup("FabSudoku");
+            stub = fabrique.createSudokuGame();  // Récupération dynamique du jeu via la fabrique
+
             puzzle = stub.getPuzzle();
-            solution = stub.getSolution(); // Assurez-vous que le serveur renvoie aussi la solution.
+            solution = stub.getSolution();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +81,7 @@ public class SudokuClient {
                                     errors++;
                                     statusLabel.setText("Errors: " + errors);
                                 }
-                                checkIfCompleted(); // Vérifie si la grille est terminée après chaque mouvement.
+                                checkIfCompleted();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -125,23 +127,18 @@ public class SudokuClient {
         }
 
         if (completed) {
-            // Si la grille est terminée correctement, félicitez le joueur.
             JOptionPane.showMessageDialog(frame, "Félicitations ! Vous avez terminé la grille !", "Victoire", JOptionPane.INFORMATION_MESSAGE);
-
-            // Demander si le joueur veut rejouer
             int option = JOptionPane.showConfirmDialog(frame, "Voulez-vous rejouer ?", "Rejouer", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                // Recharger la grille
-                frame.dispose(); // Ferme l'ancienne fenêtre
-                new SudokuClient(); // Crée une nouvelle instance
+                frame.dispose();
+                new SudokuClient();
             } else {
-                System.exit(0); // Quitte l'application si le joueur ne veut pas rejouer
+                System.exit(0);
             }
         }
     }
 
     public static void main(String[] args) {
-        //Sécurité
         System.setSecurityManager(new RMISecurityManager());
         new SudokuClient();
     }
