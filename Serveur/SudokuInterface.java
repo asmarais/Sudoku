@@ -6,4 +6,6 @@ public interface SudokuInterface extends Remote {
     String[] getSolution() throws RemoteException;
 
     boolean validateMove(int row, int col, String value) throws RemoteException;
+    void callMeBack(int time, String param, ICallback callback) throws RemoteException;
+
 }

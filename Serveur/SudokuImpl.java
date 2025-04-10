@@ -30,4 +30,10 @@ public class SudokuImpl extends UnicastRemoteObject implements SudokuInterface {
     public boolean validateMove(int row, int col, String value) throws RemoteException {
         return String.valueOf(solution[row].charAt(col)).equals(value);
     }
+    @Override
+    public void callMeBack(int time, String param, ICallback callback) throws RemoteException {
+        // Create and start a new Servant thread that will execute the callback
+        Servant servant = new Servant(time, param, callback);
+        servant.start();
+    }
 }

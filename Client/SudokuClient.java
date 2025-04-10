@@ -18,6 +18,8 @@ public class SudokuClient {
     private JButton numSelected = null;
     private int errors = 0;
 
+    private static final int ERROR_THRESHOLD = 10; // Set error threshold
+
     class Tile extends JButton {
         int r, c;
 
@@ -31,7 +33,12 @@ public class SudokuClient {
         try {
             Registry registry = LocateRegistry.getRegistry("localhost", 2000);
             FabSudokuInterface fabrique = (FabSudokuInterface) registry.lookup("FabSudoku");
-            stub = fabrique.createSudokuGame();  // Récupération dynamique du jeu via la fabrique
+            stub = fabrique.createSudokuGame();
+
+            // Call the server to trigger the callback
+            System.out.println("Client: Starting callback request...");
+            ICallback callback = new Callback(); // create callback object
+            stub.callMeBack(5, "Hello from client!", callback);  // Example callback call
 
             puzzle = stub.getPuzzle();
             solution = stub.getSolution();
@@ -80,6 +87,11 @@ public class SudokuClient {
                                 } else {
                                     errors++;
                                     statusLabel.setText("Errors: " + errors);
+
+                                    // If the error threshold is reached, notify the client
+                                    if (errors >= ERROR_THRESHOLD) {
+                                        notifyClient("You have exceeded 10 errors. Please be careful!");
+                                    }
                                 }
                                 checkIfCompleted();
                             } catch (Exception ex) {
@@ -136,6 +148,11 @@ public class SudokuClient {
                 System.exit(0);
             }
         }
+    }
+
+    // Notify the user with a custom message
+    private void notifyClient(String message) {
+        JOptionPane.showMessageDialog(frame, message, "Warning", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void main(String[] args) {
