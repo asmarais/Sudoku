@@ -18,7 +18,7 @@ public class SudokuClient {
     private JButton numSelected = null;
     private int errors = 0;
 
-    private static final int ERROR_THRESHOLD = 10; // Set error threshold
+    private static final int ERROR_THRESHOLD = 10;
 
     class Tile extends JButton {
         int r, c;
@@ -42,6 +42,13 @@ public class SudokuClient {
 
             puzzle = stub.getPuzzle();
             solution = stub.getSolution();
+
+            // Try to connect to the server
+            if (!stub.connectClient()) {
+                JOptionPane.showMessageDialog(frame, "Server is at full capacity. Please try again later.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);  
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
