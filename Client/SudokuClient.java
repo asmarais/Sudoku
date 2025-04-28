@@ -158,9 +158,13 @@ public class SudokuClient {
     }
 
     // Notify the user with a custom message
-    private void notifyClient(String message) {
-        JOptionPane.showMessageDialog(frame, message, "Warning", JOptionPane.WARNING_MESSAGE);
-    }
+   private void notifyClient(String message) {
+    JOptionPane.showMessageDialog(frame, message, "Exit Notification", JOptionPane.INFORMATION_MESSAGE);
+    // After showing the message, exit the game
+    System.exit(0); // This will close the application
+}
+
+
 
     public static void main(String[] args) {
         System.setSecurityManager(new RMISecurityManager());

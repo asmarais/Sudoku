@@ -29,6 +29,8 @@ javac *.java
 rmic SudokuImpl FabSudokuImpl
 
 java -Djava.security.policy=java.policy SudokuServer
+
+java -Djava.rmi.server.codebase=http://localhost/sudoku/ -Djava.security.policy=java.policy SudokuServer
 ```
 
 ### Côté Client
@@ -47,3 +49,5 @@ cp ../Serveur/FabSudokuInterface.class .
 javac *.java 
 
 java -Djava.security.policy=java.policy SudokuClient
+
+java -Djava.rmi.server.codebase=http://localhost/sudoku/ -Djava.security.policy=java.policy SudokuClient
